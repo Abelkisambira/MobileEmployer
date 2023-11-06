@@ -28,6 +28,8 @@ public class Register extends AppCompatActivity {
         registerBtn=findViewById(R.id.register);
         name=findViewById(R.id.fullname);
         email=findViewById(R.id.email);
+        phone=findViewById(R.id.phone);
+        password=findViewById(R.id.password);
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
