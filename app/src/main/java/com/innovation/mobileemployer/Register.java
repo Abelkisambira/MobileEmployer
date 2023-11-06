@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Register extends AppCompatActivity {
     Toolbar backTool;
@@ -30,9 +31,19 @@ public class Register extends AppCompatActivity {
         email=findViewById(R.id.email);
         phone=findViewById(R.id.phone);
         password=findViewById(R.id.password);
+
+        dbRef = FirebaseDatabase.getInstance().getReference().child("users");
+
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String username=name.getText().toString();
+                String Email=email.getText().toString();
+                String Phone=phone.getText().toString();
+                String Password=password.getText().toString();
+
+                User user=new User(username,Email,Phone,Password);
+                dbRef.push().setValue(user);
                 Intent intent= new Intent(Register.this, Navigation.class);
                 startActivity(intent);
             }
