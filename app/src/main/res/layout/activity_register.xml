@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Register">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#8ECDDD"
+        app:title="Register"
+        android:textAlignment="center"
+        android:gravity="center"
+        app:navigationIcon="@drawable/baseline_arrow_back_24"
+
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="0dp"
+        >
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="140dp"
+            android:layout_marginTop="60dp"
+            android:src="@drawable/black" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingBottom="40dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:splitMotionEvents="true"
+            app:contentPaddingBottom="0dp"
+            app:contentPaddingTop="30dp"
+            app:contentPaddingLeft="10dp"
+            app:cardCornerRadius="10dp"
+
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="left"
+                android:layout_marginEnd="20dp"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="FULL NAME"
+                    android:textStyle="bold"
+                    android:paddingTop="20dp"
+
+                    />
+                <EditText
+                    android:id="@+id/fullname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="20dp"
+                    style="@style/NoUnderlineEditTextStyle"
+                    android:contentDescription="First Name Input"
+
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="EMAIL"
+                    android:textStyle="bold"
+                    android:paddingTop="20dp"
+
+
+                    />
+                <EditText
+                    android:id="@+id/email"
+                    style="@style/NoUnderlineEditTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="Email Input"
+                    android:paddingTop="20dp"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="PHONE NUMBER"
+                    android:textStyle="bold"
+                    android:paddingTop="20dp"
+
+                    />
+                <EditText
+                    android:id="@+id/phone"
+                    style="@style/NoUnderlineEditTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="20dp"
+                    android:contentDescription="Last Name Input"/>
+
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="PASSWORD"
+                    android:textStyle="bold"
+                    android:paddingTop="20dp"/>
+
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    style="@style/NoUnderlineEditTextStyle"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="20dp"
+                    android:contentDescription="Password Input"/>
+
+            </LinearLayout>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button"
+                android:text="REGISTER"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_marginLeft="60dp"
+                android:layout_marginTop="360dp"
+                android:layout_marginRight="60dp"
+                android:layout_marginBottom="20dp"
+
+                />
+
+
+        </androidx.cardview.widget.CardView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Already have an account?"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:paddingTop="20dp"
+
+            />
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--suppress ALL -->
+<resources>
+<style name="NoUnderlineEditTextStyle" parent="Widget.AppCompat.EditText">
+    <item name="android:background">@android:color/transparent</item>
+</style>
+
+
+</resources>
