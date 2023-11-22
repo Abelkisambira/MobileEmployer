@@ -8,13 +8,26 @@ import android.os.Handler;
 import android.widget.ProgressBar;
 
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 
 public class MainActivity extends AppCompatActivity {
     private static int SPLASH_SCREEN = 5000;
     private ProgressBar progressBar;
+    FirebaseAuth mAuth;
 
-
-
+//
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        if (currentUser != null) {
+//            Intent intent= new Intent(getApplicationContext(), Home.class);
+//            startActivity(intent);
+//            finish();
+//        }
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

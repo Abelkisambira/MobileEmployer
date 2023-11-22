@@ -1,7 +1,7 @@
 package com.innovation.mobileemployer;
 
 public class User {
-    private String FullName;
+    private String username;
     private String Email;
     private String Phone;
     private String Password;
@@ -10,19 +10,19 @@ public class User {
     public User() {
     }
 
-    public User(String fullName, String email, String phone, String password) {
-        FullName = fullName;
+    public User(String username, String email, String phone, String password) {
+        this.username = username;
         Email = email;
         Phone = phone;
         Password = password;
     }
 
-    public String getFullName() {
-        return FullName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setFullName(String fullName) {
-        FullName = fullName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
