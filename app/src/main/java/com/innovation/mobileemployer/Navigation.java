@@ -38,7 +38,6 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
         // Use the existing ActionBarDrawerToggle if it's declared in the layout
         toggle = new ActionBarDrawerToggle(this, drawerLayout, bar, R.string.open_nav, R.string.close_nav);
         drawerLayout.addDrawerListener(toggle);
@@ -46,15 +45,16 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemID = item.getItemId();
+            MenuItem bottomNavigationItem = binding.bottomNavigationView.getMenu().findItem(itemID);
             highlightSelectedItem(itemID);
             if (itemID == R.id.home) {
-                showBottomNavigationFragment(new Home());
+                showDrawerLayoutFragment(new Home());
             } else if (itemID == R.id.book) {
-                showBottomNavigationFragment(new Booking());
+                showDrawerLayoutFragment(new Booking());
             } else if (itemID == R.id.chats) {
-                showBottomNavigationFragment(new Chats());
+                showDrawerLayoutFragment(new Chats());
             } else if (itemID == R.id.account) {
-                showBottomNavigationFragment(new Settings());
+                showDrawerLayoutFragment(new Settings());
             }
             return true;
         });
@@ -79,6 +79,18 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
                 .replace(R.id.drawer_fragment_container, fragment)
                 .commit();
         hideBottomNavigationFragment();
+
+        // Check if the fragment is present in the BottomNavigationView
+        int itemId = getBottomNavigationItemId(fragment);
+        MenuItem bottomNavigationItem = binding.bottomNavigationView.getMenu().findItem(itemId);
+
+        // Set the visibility state for the BottomNavigationView
+        if (bottomNavigationItem != null) {
+            binding.bottomNavigationView.setVisibility(View.VISIBLE);
+            bottomNavigationItem.setChecked(true); // Select the item in the bottom navigation
+        } else {
+            binding.bottomNavigationView.setVisibility(View.GONE);
+        }
     }
 
     private void hideBottomNavigationFragment() {
@@ -90,43 +102,19 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
         }
     }
 
-    private void showBottomNavigationFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.bottom_nav_fragment_container, fragment)
-                .commit();
-        hideDrawerLayoutFragment();
+    private int getBottomNavigationItemId(Fragment fragment) {
+        if (fragment instanceof Home) {
+            return R.id.home;
+        } else if (fragment instanceof Booking) {
+            return R.id.book;
+        } else if (fragment instanceof Chats) {
+            return R.id.chats;
+        } else if (fragment instanceof Settings) {
+            return R.id.account;
+        }
+        return -1;
     }
 
-    private void hideDrawerLayoutFragment() {
-        Fragment drawerFragment = getSupportFragmentManager().findFragmentById(R.id.drawer_fragment_container);
-        if (drawerFragment != null && drawerFragment.isVisible()) {
-            getSupportFragmentManager().beginTransaction()
-                    .remove(drawerFragment)
-                    .commit();
-        }
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int itemId = item.getItemId();
-        highlightSelectedItem(itemId);
-        if (itemId == R.id.home1) {
-            showDrawerLayoutFragment(new Home());
-        } else if (itemId == R.id.prof) {
-            showDrawerLayoutFragment(new ProfileFragment());
-        } else if (itemId == R.id.about) {
-            showDrawerLayoutFragment(new Chats());
-        } else if (itemId == R.id.settings) {
-            showDrawerLayoutFragment(new Settings());
-        } else if (itemId == R.id.nav_logoout) {
-            Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, Login.class);
-            startActivity(intent);
-            finish();
-        }
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
     private void highlightSelectedItem(int itemId) {
         if (selectedDrawerItem != null) {
             selectedDrawerItem.setChecked(false);
@@ -144,6 +132,30 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
         }
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        highlightSelectedItem(itemId);
+        if (itemId == R.id.home1) {
+            showDrawerLayoutFragment(new Home());
+        } else if (itemId == R.id.prof) {
+            showDrawerLayoutFragment(new ProfileFragment());
+        }  else if (itemId == R.id.bookings) {
+            showDrawerLayoutFragment(new Booking());
+        }
+        else if (itemId == R.id.about) {
+            showDrawerLayoutFragment(new AboutUs());
+        } else if (itemId == R.id.settings) {
+            showDrawerLayoutFragment(new Settings());
+        } else if (itemId == R.id.nav_logoout) {
+            Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, Login.class);
+            startActivity(intent);
+            finish();
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
 
     @Override
     public void onBackPressed() {

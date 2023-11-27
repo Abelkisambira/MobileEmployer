@@ -16,6 +16,12 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".SubcategoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Professionals"
+            android:exported="false" />
+        <activity
             android:name=".Search"
             android:exported="false" />
         <activity

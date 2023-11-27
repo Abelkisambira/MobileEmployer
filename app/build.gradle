@@ -33,6 +33,9 @@ android {
 }
 
 dependencies {
+    implementation ('com.squareup.okhttp3:okhttp:3.12.12') {
+        exclude group: 'com.mediatek.cta', module: 'mediatek-cta'
+    }
     implementation 'com.hbb20:ccp:2.5.0'
     implementation 'com.firebaseui:firebase-ui-firestore:8.0.2'
     implementation 'com.google.firebase:firebase-firestore:23.0.3'

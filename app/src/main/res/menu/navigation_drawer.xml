@@ -14,6 +14,10 @@
             android:id="@+id/prof"
             android:icon="@drawable/baseline_manage_accounts_24"
             android:title="Profile" />
+        <item
+            android:id="@+id/bookings"
+            android:icon="@drawable/baseline_book_online_24"
+            android:title="Bookings" />
 
         <item
             android:id="@+id/settings"
@@ -24,6 +28,7 @@
             android:id="@+id/about"
             android:icon="@drawable/baseline_mark_unread_chat_alt_24"
             android:title="About Us" />
+
     </group>
     <item
         android:title="">

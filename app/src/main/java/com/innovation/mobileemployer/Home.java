@@ -1,64 +1,127 @@
 package com.innovation.mobileemployer;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.GridView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Home#newInstance} factory method to
- * create an instance of this fragment.
- */
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.innovation.mobileemployer.adapter.CategoryAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Home extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private EditText searchEditText;
+    private GridView categoryGridView;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public Home() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Home.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Home newInstance(String param1, String param2) {
-        Home fragment = new Home();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Initialize views
+        searchEditText = view.findViewById(R.id.search_username_input);
+        categoryGridView = view.findViewById(R.id.categoryGridView);
+
+        // Fetch category data (replace with your actual data retrieval)
+        List<Category> categories = fetchCategoryData();
+
+        // Update your adapter or UI with the retrieved categories
+        updateCategoryAdapter(categories);
+
+        // Set item click listener for the GridView
+        categoryGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Category selectedCategory = (Category) parent.getItemAtPosition(position);
+
+                if (selectedCategory != null && selectedCategory.getName() != null) {
+                    // Fetch and log subcategories for the selected category
+                    fetchSubcategoriesForCategory(selectedCategory.getName());
+                } else {
+                    Log.e("Category Error", "Selected category or its name is null");
+                }
+            }
+        });
+
+    }
+
+    private List<Category> fetchCategoryData() {
+        List<Category> categories = new ArrayList<>();
+
+        FirebaseFirestore.getInstance().collection("categories")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String categoryId = document.getId();
+                                String categoryName = document.getString("name");
+                                List<String> subcategories = (List<String>) document.get("subcategories");
+
+                                Category category = new Category(categoryId, categoryName, subcategories);
+                                categories.add(category);
+                            }
+
+                            // Update your adapter or UI with the retrieved categories
+                            updateCategoryAdapter(categories);
+                        } else {
+                            Log.e("Firestore Error", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+        return categories;
+    }
+
+    private void fetchSubcategoriesForCategory(String categoryName) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference categoryRef = db.collection("categories").document(categoryName).collection("subcategories");
+
+        categoryRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    List<String> subcategories = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String subcategoryName = document.getId();
+                        subcategories.add(subcategoryName);
+                    }
+
+                    // Now you have the list of subcategories for the specified category
+                    Log.d("Subcategories", "Subcategories for " + categoryName + ": " + subcategories.toString());
+                } else {
+                    Log.e("Firestore Error", "Error getting subcategories: ", task.getException());
+                }
+            }
+        });
+    }
+
+    private void updateCategoryAdapter(List<Category> categories) {
+        // Update your adapter or UI with the retrieved categories
+        // For example, if you are using a CategoryAdapter, you can do something like:
+        CategoryAdapter categoryAdapter = new CategoryAdapter(requireContext(), categories);
+        categoryGridView.setAdapter(categoryAdapter);
     }
 }

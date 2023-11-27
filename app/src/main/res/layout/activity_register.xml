@@ -9,7 +9,7 @@
         android:id="@+id/back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#8ECDDD"
+        android:background="#FF00FFFF"
         app:title="Register"
         android:textAlignment="center"
         android:gravity="center"
@@ -24,6 +24,12 @@
         android:gravity="center"
         android:layout_marginTop="0dp"
         >
+
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/black" />
 
         <ImageView
             android:layout_width="200dp"

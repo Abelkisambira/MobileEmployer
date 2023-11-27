@@ -1,37 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Home"
-    android:orientation="vertical">
-    <androidx.appcompat.widget.Toolbar
+    android:fillViewport="true"
+    android:orientation="vertical"
+    tools:context=".Home">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/toolbar"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/cyan"
+        android:orientation="vertical">
 
-        >
+        <!-- Your existing content -->
+
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:textColor="@color/white"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                android:layout_gravity="center_vertical"
-                />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:id="@+id/img">
 
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/black" />
         </LinearLayout>
 
-    </androidx.appcompat.widget.Toolbar>
+        <!-- Search Bar -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/img"
+            android:paddingBottom="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:id="@+id/search_user_layout">
+
+            <EditText
+                android:id="@+id/search_username_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_toLeftOf="@+id/search_user"
+                android:background="@color/white"
+                android:elevation="4dp"
+                android:hint="Search "
+                android:padding="10dp" />
+
+            <ImageButton
+                android:id="@+id/search_user"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="10dp"
+                android:contentDescription="Search"
+                android:src="@drawable/baseline_search_24"
+                />
+        </RelativeLayout>
 
 
-
-</LinearLayout>
+        <!-- GridView for Categories -->
+        <GridView
+            android:id="@+id/categoryGridView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:horizontalSpacing="16dp"
+            android:numColumns="2"
+            android:padding="20dp"
+            android:verticalSpacing="16dp"/>
+    </LinearLayout>
+</ScrollView>
