@@ -10,42 +10,58 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 
-
 public class MainActivity extends AppCompatActivity {
-    private static int SPLASH_SCREEN = 5000;
+    private static int SPLASH_SCREEN = 3000;
     private ProgressBar progressBar;
-    FirebaseAuth mAuth;
-
-//
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if (currentUser != null) {
-//            Intent intent= new Intent(getApplicationContext(), Home.class);
-//            startActivity(intent);
-//            finish();
-//        }
-//    }
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FirebaseApp.initializeApp(this);
 
         progressBar = findViewById(R.id.progressBar);
 
         progressBar.setVisibility(ProgressBar.VISIBLE);
+        FirebaseApp.initializeApp(this);
+        mAuth = FirebaseAuth.getInstance();
+        checkUserSession();
+    }
 
+    private void checkUserSession() {
+        authStateListener = firebaseAuth -> {
+            if (firebaseAuth.getCurrentUser() != null) {
+                // User is logged in, navigate to home
+                Intent intent = new Intent(MainActivity.this, Login.class);
+                startActivity(intent);
+                finish();
+            } else {
+                // User is not logged in, navigate to login
+                redirectToLogin();
+            }
+        };
+
+        // Add AuthStateListener
+        mAuth.addAuthStateListener(authStateListener);
+
+        // Delay for splash screen
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(MainActivity.this, Navigation.class);
-                startActivity(intent);
+                // Remove AuthStateListener after the splash screen
+                mAuth.removeAuthStateListener(authStateListener);
+
+                // Finish splash screen and move to the next screen
                 finish();
             }
         }, SPLASH_SCREEN);
+    }
 
+    private void redirectToLogin() {
+        // User is not logged in, navigate to login
+        Intent intent = new Intent(MainActivity.this, Login.class);
+        startActivity(intent);
     }
 }
+

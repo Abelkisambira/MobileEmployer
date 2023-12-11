@@ -55,7 +55,7 @@ public class Register extends AppCompatActivity {
         registerBtn=findViewById(R.id.register);
         name=findViewById(R.id.fullname);
         email=findViewById(R.id.email);
-        phone=findViewById(R.id.phone);
+        phone=findViewById(R.id.phoneholder);
         password=findViewById(R.id.password);
 
         dbRef = FirebaseDatabase.getInstance().getReference().child("Clients");

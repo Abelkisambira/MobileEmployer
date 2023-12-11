@@ -1,6 +1,9 @@
 package com.innovation.mobileemployer;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +18,6 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -28,6 +30,7 @@ public class Home extends Fragment {
 
     private EditText searchEditText;
     private GridView categoryGridView;
+    private List<Category> categories;  // Declare categories at the class level
 
     @Nullable
     @Override
@@ -40,14 +43,13 @@ public class Home extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Initialize views
-        searchEditText = view.findViewById(R.id.search_username_input);
+        searchEditText = view.findViewById(R.id.search_username_input1);
         categoryGridView = view.findViewById(R.id.categoryGridView);
 
-        // Fetch category data (replace with your actual data retrieval)
-        List<Category> categories = fetchCategoryData();
 
-        // Update your adapter or UI with the retrieved categories
-        updateCategoryAdapter(categories);
+
+        // Fetch category data (replace with your actual data retrieval)
+        fetchCategoryData();
 
         // Set item click listener for the GridView
         categoryGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -55,19 +57,34 @@ public class Home extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Category selectedCategory = (Category) parent.getItemAtPosition(position);
 
-                if (selectedCategory != null && selectedCategory.getName() != null) {
-                    // Fetch and log subcategories for the selected category
-                    fetchSubcategoriesForCategory(selectedCategory.getName());
+                if (selectedCategory != null) {
+                    // Navigate to CategoryActivity with the selected category ID
+                    navigateToCategoryActivity(selectedCategory.getId());
                 } else {
-                    Log.e("Category Error", "Selected category or its name is null");
+                    Log.e("Category Error", "Selected category is null");
                 }
             }
         });
 
+        // Add search functionality
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                filterCategories(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
     }
 
-    private List<Category> fetchCategoryData() {
-        List<Category> categories = new ArrayList<>();
+    private void fetchCategoryData() {
+        categories = new ArrayList<>();  // Initialize the list
 
         FirebaseFirestore.getInstance().collection("categories")
                 .get()
@@ -79,49 +96,40 @@ public class Home extends Fragment {
                                 String categoryId = document.getId();
                                 String categoryName = document.getString("name");
                                 List<String> subcategories = (List<String>) document.get("subcategories");
-
-                                Category category = new Category(categoryId, categoryName, subcategories);
+                                String imageUrl = document.getString("imageUrl");
+                                Category category = new Category(categoryId, categoryName, imageUrl, subcategories);
                                 categories.add(category);
                             }
 
-                            // Update your adapter or UI with the retrieved categories
                             updateCategoryAdapter(categories);
                         } else {
                             Log.e("Firestore Error", "Error getting documents: ", task.getException());
                         }
                     }
                 });
-
-        return categories;
     }
 
-    private void fetchSubcategoriesForCategory(String categoryName) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference categoryRef = db.collection("categories").document(categoryName).collection("subcategories");
+    private void filterCategories(String searchText) {
+        List<Category> filteredCategories = new ArrayList<>();
 
-        categoryRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    List<String> subcategories = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String subcategoryName = document.getId();
-                        subcategories.add(subcategoryName);
-                    }
-
-                    // Now you have the list of subcategories for the specified category
-                    Log.d("Subcategories", "Subcategories for " + categoryName + ": " + subcategories.toString());
-                } else {
-                    Log.e("Firestore Error", "Error getting subcategories: ", task.getException());
-                }
+        for (Category category : categories) {
+            if (category.getName().toLowerCase().contains(searchText.toLowerCase())) {
+                filteredCategories.add(category);
             }
-        });
+        }
+
+        updateCategoryAdapter(filteredCategories);
     }
 
     private void updateCategoryAdapter(List<Category> categories) {
-        // Update your adapter or UI with the retrieved categories
-        // For example, if you are using a CategoryAdapter, you can do something like:
         CategoryAdapter categoryAdapter = new CategoryAdapter(requireContext(), categories);
         categoryGridView.setAdapter(categoryAdapter);
+    }
+
+    private void navigateToCategoryActivity(String categoryId) {
+
+        Intent intent = new Intent(requireContext(), CategoryActivity.class);
+        intent.putExtra("categoryId", categoryId);
+        startActivity(intent);
     }
 }

@@ -8,15 +8,18 @@ import java.util.List;
 public class Category implements Parcelable {
     private String id;
     private String name;
+
+    private String imageUrl;
     private List<String> subcategories;
 
     // Empty constructor needed for Parcelable
     public Category() {
     }
 
-    public Category(String id, String name, List<String> subcategories) {
+    public Category(String id, String name, String imageUrl ,List<String> subcategories) {
         this.id = id;
         this.name = name;
+        this.imageUrl=imageUrl;
         this.subcategories = subcategories;
     }
 
@@ -24,6 +27,7 @@ public class Category implements Parcelable {
     protected Category(Parcel in) {
         id = in.readString();
         name = in.readString();
+        imageUrl=in.readString();
         subcategories = in.createStringArrayList();
     }
 
@@ -31,6 +35,7 @@ public class Category implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);
         dest.writeString(name);
+        dest.writeString(imageUrl);
         dest.writeStringList(subcategories);
     }
 
@@ -67,6 +72,14 @@ public class Category implements Parcelable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public List<String> getSubcategories() {

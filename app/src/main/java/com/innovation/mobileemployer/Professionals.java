@@ -1,22 +1,29 @@
 package com.innovation.mobileemployer;
 
+import java.util.List;
+
 public class Professionals {
 
     private String id;
     private String username;
     private String email;
     private String phone;
-    private String password;
+    private String imageUrl;
+    private String category;
+    private List<String> subcategories;
 
     // Empty constructor needed for Firebase
     public Professionals() {
     }
 
-    public Professionals(String username, String email, String phone, String password) {
+    public Professionals(String username, String email, String phone, String imageUrl, String category, List<String> subcategories) {
+
         this.username = username;
         this.email = email;
         this.phone = phone;
-        this.password = password;
+        this.imageUrl = imageUrl;
+        this.category = category;
+        this.subcategories = subcategories;
     }
 
     public String getId() {
@@ -51,11 +58,28 @@ public class Professionals {
         this.phone = phone;
     }
 
-    public String getPassword() {
-        return password;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public List<String> getSubcategories() {
+        return subcategories;
+    }
+
+    public void setSubcategories(List<String> subcategories) {
+        this.subcategories = subcategories;
     }
 }
+

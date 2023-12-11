@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.innovation.mobileemployer.Category;
 import com.innovation.mobileemployer.R;
 
@@ -50,7 +51,8 @@ public class CategoryAdapter extends BaseAdapter {
             // Create a ViewHolder to store references to the views for this item
             viewHolder = new ViewHolder();
             viewHolder.categoryTextView = convertView.findViewById(R.id.categoryName);
-            viewHolder.subcategoriesTextView=convertView.findViewById(R.id.subcategoriesTextView);
+            viewHolder.subcategoriesTextView = convertView.findViewById(R.id.subcategoriesTextView);
+            viewHolder.categoryImageView = convertView.findViewById(R.id.categoryImage);
 
             // Set the ViewHolder as a tag for the convertView for easy access
             convertView.setTag(viewHolder);
@@ -75,11 +77,19 @@ public class CategoryAdapter extends BaseAdapter {
             viewHolder.subcategoriesTextView.setVisibility(View.GONE);
         }
 
+        // Load the image using Glide
+        Glide.with(context)
+                .load(category.getImageUrl()) // Use getImageUrl() from your Category class
+                .placeholder(R.drawable.baseline_person_24) // Placeholder image while loading
+                .into(viewHolder.categoryImageView);
+
         return convertView;
     }
+
 
     // ViewHolder pattern to improve performance
     private static class ViewHolder {
         TextView categoryTextView,subcategoriesTextView;
+        ImageView categoryImageView;
     }
 }

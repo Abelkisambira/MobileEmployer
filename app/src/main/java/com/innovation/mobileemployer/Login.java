@@ -1,14 +1,8 @@
 package com.innovation.mobileemployer;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,20 +10,21 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
 public class Login extends AppCompatActivity {
     Toolbar backTool;
     Button loginBtn;
 
     TextView Forgot,Reg;
     EditText email,password;
-
-    FirebaseAuth mAuth;
+    private FirebaseAuth mAuth;
 
     ProgressBar progressBar;
 
@@ -39,7 +34,6 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         mAuth = FirebaseAuth.getInstance();
         loginBtn=findViewById(R.id.login);
         Forgot=findViewById(R.id.forgot);
@@ -116,6 +110,7 @@ public class Login extends AppCompatActivity {
         });
 
     }
+
 //    void setInprogress(boolean inprogress){
 //        if (inprogress){
 //            progressBar.setVisibility(View.VISIBLE);

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CategoryActivity"
+    android:orientation="vertical">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/back2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FF00FFFF"
+        app:title="Get a Professional"
+        app:titleTextColor="@color/white"
+        android:textAlignment="center"
+        android:gravity="center"
+        app:navigationIcon="@drawable/baseline_arrow_back_24"
+        />
+
+    <LinearLayout
+        android:id="@+id/specific"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+    >
+
+
+    </LinearLayout>
+
+</LinearLayout>

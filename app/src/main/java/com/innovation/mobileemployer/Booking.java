@@ -1,23 +1,26 @@
 package com.innovation.mobileemployer;
 
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,10 +30,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Booking extends Fragment {
 
     private List<Professionals> allProfessionals;
     private List<Professionals> displayedProfessionals;
+
+    private static final int READ_EXTERNAL_STORAGE_REQUEST_CODE = 100;
 
     @Nullable
     @Override
@@ -48,22 +54,13 @@ public class Booking extends Fragment {
 
         // Retrieve and fill professional data
         retrieveAndFillProfessionalData();
-        EditText searchEditText = view.findViewById(R.id.search_username_input);
-        searchEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                filterProfessionals(editable.toString());
-            }
-        });
-
+        // Check and request permission
+        if (hasReadExternalStoragePermission()) {
+            displayProfessionalsInView();
+        } else {
+            requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE_REQUEST_CODE);
+        }
     }
 
     private void retrieveAndFillProfessionalData() {
@@ -92,6 +89,9 @@ public class Booking extends Fragment {
                 // Update your UI or do other processing with the retrieved data
                 allProfessionals = professionals;
                 updateUIWithProfessionals(allProfessionals);
+
+                // Call displayProfessionalsInView here after data retrieval
+                displayProfessionalsInView();
             }
 
             @Override
@@ -102,11 +102,10 @@ public class Booking extends Fragment {
         });
     }
 
-
     private void updateUIWithProfessionals(List<Professionals> professionals) {
         // Assuming you want to display all professionals by default
         displayedProfessionals = professionals;
-        displayProfessionalsInView();
+        // You can choose to call displayProfessionalsInView() here if needed
     }
 
     private void displayProfessionalsInView() {
@@ -130,22 +129,46 @@ public class Booking extends Fragment {
             LinearLayout linearLayout = new LinearLayout(requireContext());
             linearLayout.setOrientation(LinearLayout.VERTICAL);
 
+            // Display the image (assuming you are using an ImageView)
+            ImageView imageView = new ImageView(requireContext());
+
+            // Load and display the image using Glide only if permission is granted
+            if (hasReadExternalStoragePermission()) {
+                loadAndDisplayImage(professional.getImageUrl(), imageView);
+            }
+
+            linearLayout.addView(imageView);
+
+            // Display the category
+            TextView categoryTextView = new TextView(requireContext());
+            categoryTextView.setText("Category: " + professional.getCategory());
+            linearLayout.addView(categoryTextView);
+// Display the subcategories (assuming a list of subcategories)
+            List<String> subcategories = professional.getSubcategories();
+            if (subcategories != null) {
+                for (String subcategory : subcategories) {
+                    TextView subcategoryTextView = new TextView(requireContext());
+                    subcategoryTextView.setText("Subcategory: " + subcategory);
+                    linearLayout.addView(subcategoryTextView);
+                }
+            }
+
+
+            TextView usernameTextView = new TextView(requireContext());
+            usernameTextView.setText("Username: " + professional.getUsername());
+            linearLayout.addView(usernameTextView);
+
             // Create a new TextView for each field (email, password, phone, username)
             TextView emailTextView = new TextView(requireContext());
             emailTextView.setText("Email: " + professional.getEmail());
             linearLayout.addView(emailTextView);
 
-            TextView passwordTextView = new TextView(requireContext());
-            passwordTextView.setText("Password: " + professional.getPassword());
-            linearLayout.addView(passwordTextView);
 
             TextView phoneTextView = new TextView(requireContext());
             phoneTextView.setText("Phone: " + professional.getPhone());
             linearLayout.addView(phoneTextView);
 
-            TextView usernameTextView = new TextView(requireContext());
-            usernameTextView.setText("Username: " + professional.getUsername());
-            linearLayout.addView(usernameTextView);
+
 
             // Create a new Button or ImageButton
             Button bookButton = new Button(requireContext());
@@ -156,25 +179,35 @@ public class Booking extends Fragment {
             // Add the Button to the LinearLayout
             linearLayout.addView(bookButton);
 
-            // Add the LinearLayout to the CardView
-            cardView.addView(linearLayout);
 
-            // Add the CardView to the parent LinearLayout
+            cardView.addView(linearLayout);
             professionalLayout.addView(cardView);
         }
     }
-    private void filterProfessionals(String query) {
-        List<Professionals> filteredList = new ArrayList<>();
 
-        for (Professionals professional : allProfessionals) {
-            if (professional.getUsername().toLowerCase().contains(query.toLowerCase())) {
-                filteredList.add(professional);
-            }
-        }
-
-        displayedProfessionals = filteredList;
-        displayProfessionalsInView();
+    private void loadAndDisplayImage(String imageUrl, ImageView imageView) {
+        // Load the image using Glide
+        Glide.with(this)
+                .load(imageUrl)
+                .into(imageView);
     }
 
-}
+    private boolean hasReadExternalStoragePermission() {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
+                ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
 
+    // Handle the result of the permission request
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == READ_EXTERNAL_STORAGE_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, refresh the view
+                displayProfessionalsInView();
+            } else {
+                // Permission denied, handle accordingly
+                Toast.makeText(requireContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+}

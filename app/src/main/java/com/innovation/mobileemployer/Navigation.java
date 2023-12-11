@@ -32,7 +32,8 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
         binding = ActivityNavigationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         bar = findViewById(R.id.toolbar);
-
+        // Set Home as the default fragment
+        showDrawerLayoutFragment(new Home());
         setSupportActionBar(bar);
         drawerLayout = findViewById(R.id.drawer_layout);
 

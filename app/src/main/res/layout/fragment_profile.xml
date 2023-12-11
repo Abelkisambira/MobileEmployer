@@ -8,36 +8,15 @@
     android:layout_height="match_parent"
     tools:context=".ProfileFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_marginTop="90dp"
-        android:id="@+id/linear"
-        >
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="My Profile"
-            android:textAlignment="textStart"
-            android:layout_marginLeft="20dp"
-            android:textStyle="bold"
-            android:textSize="18dp"
-            />
-    </LinearLayout>
 
     <ScrollView
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_marginTop="100dp"
         android:id="@+id/scroll"
         >
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/linear"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
@@ -58,12 +37,22 @@
                 android:layout_column="0"
                 android:layout_columnWeight="1">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="My Profile"
+                    android:textAlignment="textStart"
+                    android:layout_marginLeft="30dp"
+                    android:textStyle="bold"
+                    android:textSize="25dp"
+                    />
+
                 <!-- ImageView and Upload Button Section -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="40dp"
                     >
 
                     <ImageView
@@ -92,7 +81,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:layout_marginTop="110dp"
+                    android:layout_marginTop="150dp"
                     android:orientation="vertical">
 
                     <TextView
