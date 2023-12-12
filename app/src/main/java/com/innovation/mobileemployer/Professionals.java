@@ -11,7 +11,7 @@ public class Professionals {
     private String imageUrl;
     private String category;
     private List<String> subcategories;
-
+    private String fcmToken;
     // Empty constructor needed for Firebase
     public Professionals() {
     }
@@ -80,6 +80,13 @@ public class Professionals {
 
     public void setSubcategories(List<String> subcategories) {
         this.subcategories = subcategories;
+    }
+    public String getFCMToken() {
+        return fcmToken;
+    }
+
+    public void setFCMToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 }
 

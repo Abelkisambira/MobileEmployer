@@ -1,5 +1,6 @@
 package com.innovation.mobileemployer;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
@@ -26,18 +27,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 public class Booking extends Fragment {
 
     private List<Professionals> allProfessionals;
     private List<Professionals> displayedProfessionals;
-
     private static final int READ_EXTERNAL_STORAGE_REQUEST_CODE = 100;
-
+    private static final String TAG = "Booking";
+    private boolean isViewCreated = false;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -143,7 +147,7 @@ public class Booking extends Fragment {
             TextView categoryTextView = new TextView(requireContext());
             categoryTextView.setText("Category: " + professional.getCategory());
             linearLayout.addView(categoryTextView);
-// Display the subcategories (assuming a list of subcategories)
+            // Display the subcategories (assuming a list of subcategories)
             List<String> subcategories = professional.getSubcategories();
             if (subcategories != null) {
                 for (String subcategory : subcategories) {
@@ -152,7 +156,6 @@ public class Booking extends Fragment {
                     linearLayout.addView(subcategoryTextView);
                 }
             }
-
 
             TextView usernameTextView = new TextView(requireContext());
             usernameTextView.setText("Username: " + professional.getUsername());
@@ -163,12 +166,9 @@ public class Booking extends Fragment {
             emailTextView.setText("Email: " + professional.getEmail());
             linearLayout.addView(emailTextView);
 
-
             TextView phoneTextView = new TextView(requireContext());
             phoneTextView.setText("Phone: " + professional.getPhone());
             linearLayout.addView(phoneTextView);
-
-
 
             // Create a new Button or ImageButton
             Button bookButton = new Button(requireContext());
@@ -178,10 +178,34 @@ public class Booking extends Fragment {
 
             // Add the Button to the LinearLayout
             linearLayout.addView(bookButton);
+            // Inside Booking Fragment
+            bookButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Navigate to Send_Booking activity with professional's UID
+                    Intent intent = new Intent(getActivity(), Send_Booking.class);
+                    intent.putExtra("professionalUid", professional.getId());
+                    startActivity(intent);
+                }
+            });
 
 
             cardView.addView(linearLayout);
             professionalLayout.addView(cardView);
+
+            // Add a click listener to the "Book" button
+            bookButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Call a method to send a notification to the professional
+                    sendNotificationToProfessional(professional);
+
+                    // Launch SendBookingActivity with professional's FCM token
+                    Intent intent = new Intent(requireContext(), Send_Booking.class);
+                    intent.putExtra("professionalFCMToken", professional.getFCMToken());
+                    startActivity(intent);
+                }
+            });
         }
     }
 
@@ -195,6 +219,21 @@ public class Booking extends Fragment {
     private boolean hasReadExternalStoragePermission() {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
                 ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void sendNotificationToProfessional(Professionals professional) {
+        // Get the FCM token of the professional from your database
+        String professionalFCMToken = professional.getFCMToken();
+
+        // Create a data payload for the notification
+        Map<String, String> data = new HashMap<>();
+        data.put("title", "New Booking");
+        data.put("message", "You have a new booking request.");
+
+        // Send the FCM message
+        FirebaseMessaging.getInstance().send(new RemoteMessage.Builder(professionalFCMToken)
+                .setData(data)
+                .build());
     }
 
     // Handle the result of the permission request

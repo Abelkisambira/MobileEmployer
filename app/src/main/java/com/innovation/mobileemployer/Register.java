@@ -1,8 +1,11 @@
 package com.innovation.mobileemployer;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +22,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 
 public class Register extends AppCompatActivity {
@@ -94,17 +98,19 @@ public class Register extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-                                        Toast.makeText(Register.this, "Account Created.",
-                                                Toast.LENGTH_SHORT).show();
-                                        dbRef.push().setValue(user);
+                                        getFCMToken();
+                                        String uid = mAuth.getCurrentUser().getUid();
+
+                                        // Store user data in the database under the UID
+                                        dbRef.child(uid).setValue(user);
+
+                                        Toast.makeText(Register.this, "Account Created.", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(Register.this, Login.class);
                                         startActivity(intent);
                                         finish();
-                                        return;
                                     } else {
-                                        // If sign in fails, display a message to the user.
-                                        Toast.makeText(Register.this, "Authentication failed.",
-                                                Toast.LENGTH_SHORT).show();
+                                        // If sign up fails, display a message to the user.
+                                        Toast.makeText(Register.this, "Authentication failed. " + task.getException(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -130,4 +136,29 @@ public class Register extends AppCompatActivity {
             }
         });
     }
+    private void getFCMToken() {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get the FCM token
+                        String fcmToken = task.getResult();
+
+
+
+                        Log.d(TAG, "FCM token: " + fcmToken);
+                        // Store the FCM token in the database under the professional's UID
+                        if (mAuth.getCurrentUser() != null) {
+                            String uid = mAuth.getCurrentUser().getUid();
+                            dbRef.child(uid).child("fcmToken").setValue(fcmToken);
+                        }
+                    }
+                });
+    }
+
 }
