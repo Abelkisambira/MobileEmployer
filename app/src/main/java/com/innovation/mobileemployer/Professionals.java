@@ -12,6 +12,7 @@ public class Professionals {
     private String category;
     private List<String> subcategories;
     private String fcmToken;
+    private String bookingStatus;
     // Empty constructor needed for Firebase
     public Professionals() {
     }
@@ -87,6 +88,9 @@ public class Professionals {
 
     public void setFCMToken(String fcmToken) {
         this.fcmToken = fcmToken;
+    }
+    public String getBookingStatus() {
+        return bookingStatus;
     }
 }
 

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -77,6 +78,7 @@ public class Login extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
+                                    showLoginSuccessDialog();
                                     // Sign in success, update UI with the signed-in user's information
                                     Toast.makeText(Login.this, "Login Successfull.",
                                             Toast.LENGTH_SHORT).show();
@@ -87,6 +89,8 @@ public class Login extends AppCompatActivity {
                                     // If sign in fails, display a message to the user.
                                     Toast.makeText(Login.this, "Authentication failed.",
                                             Toast.LENGTH_SHORT).show();
+                                    showLoginFailureDialog();
+
                                 }
                             }
                         });
@@ -111,6 +115,20 @@ public class Login extends AppCompatActivity {
 
     }
 
+    private void showLoginSuccessDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+        builder.setTitle("Login Successful")
+                .setMessage("Welcome back! Your login was successful.")
+                .setPositiveButton("OK", null) // You can add a listener here if needed
+                .show();
+    }
+    private void showLoginFailureDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+        builder.setTitle("Login Failed")
+                .setMessage("Authentication failed. Please check your email and password.")
+                .setPositiveButton("OK", null) // You can add a listener here if needed
+                .show();
+    }
 //    void setInprogress(boolean inprogress){
 //        if (inprogress){
 //            progressBar.setVisibility(View.VISIBLE);
