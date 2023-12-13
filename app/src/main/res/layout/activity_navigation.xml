@@ -67,7 +67,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            app:itemIconTint="#FF00FFFF"
+            app:itemIconTint="@color/cyan"
             app:itemTextColor="@color/black"
             app:itemTextAppearanceActiveBoldEnabled="true"
             app:itemTextAppearanceActive="@color/black"

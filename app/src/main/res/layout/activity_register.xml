@@ -12,6 +12,7 @@
         android:background="#FF00FFFF"
         app:title="Register"
         android:textAlignment="center"
+        app:titleTextColor="@color/white"
         android:gravity="center"
         app:navigationIcon="@drawable/baseline_arrow_back_24"
 

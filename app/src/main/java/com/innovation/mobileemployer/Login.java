@@ -64,8 +64,8 @@ public class Login extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String Email=email.getText().toString();
-                String Password=password.getText().toString();
+                String Email=email.getText().toString().trim();
+                String Password=password.getText().toString().trim();
 
                 if(TextUtils.isEmpty(Email) || TextUtils.isEmpty(Password) ){
                     Toast.makeText(Login.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();

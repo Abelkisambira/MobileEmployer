@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Pending">
+    tools:context=".Cancelled">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,8 +14,8 @@
             android:id="@+id/back"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/cyan"
-            app:title="Pending Bookings"
+            android:background="#FF00FFFF"
+            app:title="Cancelled Bookings"
             app:titleTextColor="@color/white"
             android:textAlignment="center"
             android:gravity="center"
@@ -29,6 +29,7 @@
             android:layout_height="560dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="10dp"
+            android:layout_marginTop="50dp"
             android:layout_below="@id/back"
             app:cardUseCompatPadding="true">
 
@@ -42,7 +43,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="No pending bookings"
+                    android:text="No cancelled bookings"
                     android:layout_marginRight="20dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
@@ -52,36 +53,5 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="10dp"
-            app:cardUseCompatPadding="true"
-            android:layout_below="@+id/home"
-            android:layout_columnWeight="1">
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:gravity="center"
-                android:orientation="vertical">
-
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/cancelBtn"
-                    android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:text="Cancel Booking"
-                    android:textAllCaps="false"
-                    android:background="@drawable/button"
-                    android:textColor="@color/white"
-                    android:layout_marginBottom="10dp"
-                    android:textStyle="bold"
-                    android:textSize="20dp"
-                    />
-
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
     </RelativeLayout>
 </ScrollView>

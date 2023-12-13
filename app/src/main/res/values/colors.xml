@@ -2,8 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="cyani">#9ACEEB</color>
-    <color name="cyan">#FF00FFFF</color>
+    <color name="cyan">#9ACEEB</color>
+    <color name="cyani">#FF00FFFF</color>
     <color name="lily">#DB8780</color>
     <color name="lightgrey">#C0C0C0</color>
+    <color name="cream">#FDF5E6</color>
+    <color name="border_color">#000000</color>
 </resources>
