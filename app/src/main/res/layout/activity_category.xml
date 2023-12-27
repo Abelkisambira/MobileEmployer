@@ -1,31 +1,52 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    tools:context=".CategoryActivity"-->
+<!--    android:orientation="vertical">-->
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/back2"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="#FF00FFFF"-->
+<!--        app:title="Get a Professional"-->
+<!--        app:titleTextColor="@color/white"-->
+<!--        android:textAlignment="center"-->
+<!--        android:gravity="center"-->
+<!--        app:navigationIcon="@drawable/baseline_arrow_back_24"-->
+<!--        />-->
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/specific"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--    >-->
+
+
+<!--    </LinearLayout>-->
+
+<!--</LinearLayout>-->
+<!-- activity_category.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".CategoryActivity"
-    android:orientation="vertical">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/back2"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/categoryNameTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FF00FFFF"
-        app:title="Get a Professional"
-        app:titleTextColor="@color/white"
-        android:textAlignment="center"
-        android:gravity="center"
-        app:navigationIcon="@drawable/baseline_arrow_back_24"
-        />
+        android:text="Category Name"
+        android:padding="16dp"/>
 
-    <LinearLayout
-        android:id="@+id/specific"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/subcategoryRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-    >
+        android:layout_height="match_parent"
+        android:layout_below="@id/categoryNameTextView"
+        android:padding="16dp"/>
 
-
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

@@ -14,5 +14,27 @@ public class BookigData {
         this.timestamp = timestamp;
     }
 
-    // Add getters and setters
+    public String getProfessionalId() {
+        return professionalId;
+    }
+
+    public void setProfessionalId(String professionalId) {
+        this.professionalId = professionalId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
 }

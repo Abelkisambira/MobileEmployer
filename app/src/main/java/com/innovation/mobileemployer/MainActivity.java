@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         authStateListener = firebaseAuth -> {
             if (firebaseAuth.getCurrentUser() != null) {
                 // User is logged in, navigate to home
-                Intent intent = new Intent(MainActivity.this, Login.class);
+                Intent intent = new Intent(MainActivity.this, Navigation.class);
                 startActivity(intent);
                 finish();
             } else {

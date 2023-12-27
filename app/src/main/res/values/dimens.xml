@@ -2,4 +2,5 @@
     <dimen name="card_width">150dp</dimen>
     <dimen name="card_height">150dp</dimen>
     <dimen name="card_corner_radius">20dp</dimen>
-</resources>
+    <dimen name="start_size">4dp</dimen>
+    </resources>

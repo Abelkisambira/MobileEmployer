@@ -1,95 +1,80 @@
 package com.innovation.mobileemployer.adapter;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.innovation.mobileemployer.Category;
 import com.innovation.mobileemployer.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class CategoryAdapter extends BaseAdapter {
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
     private Context context;
-    private List<Category> categoryList;
+    private List<Category> categories;
+    private OnItemClickListener onItemClickListener;
 
-    public CategoryAdapter(Context context, List<Category> categoryList) {
+    public CategoryAdapter(Context context, List<Category> categories) {
         this.context = context;
-        this.categoryList = categoryList;
+        this.categories = categories;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
+
+    @NonNull
+    @Override
+    public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_category, parent, false);
+        return new CategoryViewHolder(view);
     }
 
     @Override
-    public int getCount() {
-        return categoryList.size();
+    public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
+        Category category = categories.get(position);
+
+        // Load image using Picasso (replace with Glide if preferred)
+        Picasso.get().load(category.getImageUrl()).into(holder.imageView);
+
+        holder.nameTextView.setText(category.getName());
+
+        // Set click listener
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(category);
+                }
+            }
+        });
     }
 
     @Override
-    public Object getItem(int position) {
-        return categoryList.get(position);
+    public int getItemCount() {
+        return categories.size();
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
+    public interface OnItemClickListener {
+        void onItemClick(Category category);
     }
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
+    static class CategoryViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageView;
+        TextView nameTextView;
 
-        if (convertView == null) {
-            // Inflate the layout for each item in the GridView
-            convertView = LayoutInflater.from(context).inflate(R.layout.grid_item_category, parent, false);
-
-            // Create a ViewHolder to store references to the views for this item
-            viewHolder = new ViewHolder();
-            viewHolder.categoryTextView = convertView.findViewById(R.id.categoryName);
-            viewHolder.subcategoriesTextView = convertView.findViewById(R.id.subcategoriesTextView);
-            viewHolder.categoryImageView = convertView.findViewById(R.id.categoryImage);
-
-            // Set the ViewHolder as a tag for the convertView for easy access
-            convertView.setTag(viewHolder);
-        } else {
-            // If convertView is not null, reuse the ViewHolder from tag
-            viewHolder = (ViewHolder) convertView.getTag();
+        public CategoryViewHolder(@NonNull View itemView) {
+            super(itemView);
+            imageView = itemView.findViewById(R.id.imageView);
+            nameTextView = itemView.findViewById(R.id.nameTextView);
         }
-
-        // Get the data for this position
-        Category category = categoryList.get(position);
-
-        // Set data to views
-        viewHolder.categoryTextView.setText(category.getName());
-
-        // Handle subcategories (you can customize this part based on your UI)
-        List<String> subcategories = category.getSubcategories();
-        if (subcategories != null && !subcategories.isEmpty()) {
-            String subcategoriesText = TextUtils.join(", ", subcategories);
-            viewHolder.subcategoriesTextView.setText("Subcategories: " + subcategoriesText);
-            viewHolder.subcategoriesTextView.setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.subcategoriesTextView.setVisibility(View.GONE);
-        }
-
-        // Load the image using Glide
-        Glide.with(context)
-                .load(category.getImageUrl()) // Use getImageUrl() from your Category class
-                .placeholder(R.drawable.baseline_person_24) // Placeholder image while loading
-                .into(viewHolder.categoryImageView);
-
-        return convertView;
-    }
-
-
-    // ViewHolder pattern to improve performance
-    private static class ViewHolder {
-        TextView categoryTextView,subcategoriesTextView;
-        ImageView categoryImageView;
     }
 }

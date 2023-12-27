@@ -1,11 +1,12 @@
 package com.innovation.mobileemployer;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class User {
     private String username;
     private String Email;
     private String Phone;
     private String Password;
-
 
     public User() {
     }
@@ -47,5 +48,17 @@ public class User {
 
     public void setPassword(String password) {
         Password = password;
+    }
+
+    // New method to get the current user's display name
+    public static String getCurrentUserName() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+
+        if (user != null) {
+            return user.getDisplayName();
+        }
+
+        return null;
     }
 }

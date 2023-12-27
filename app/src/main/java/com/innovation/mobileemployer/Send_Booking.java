@@ -90,59 +90,63 @@ public class Send_Booking extends AppCompatActivity {
         }
 
     private void saveBookingDetails(String professionalId, String professionalFCMToken) {
-            if (currentUser != null) {
+        if (currentUser != null) {
 
-                // Ensure professionalId is not null or empty
-                if (TextUtils.isEmpty(professionalId)) {
-                    Toast.makeText(this, "Invalid professionalId", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                else if(TextUtils.isEmpty(professionalFCMToken)){
-                    Toast.makeText(this, "Invalid professionalFCMToken", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-
-                // Get selected time from TimePicker
-                int hour, minute;
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    hour = timePicker.getHour();
-                    minute = timePicker.getMinute();
-                } else {
-                    // For API level 21 to 22
-                    hour = timePicker.getCurrentHour();
-                    minute = timePicker.getCurrentMinute();
-                }
-
-                String selectedTime = String.format("%02d:%02d", hour, minute);
-
-
-                // Get selected date from DatePicker
-                int day = datePicker.getDayOfMonth();
-                int month = datePicker.getMonth() + 1; // Month is 0-based
-                int year = datePicker.getYear();
-                String selectedDate = String.format("%02d-%02d-%04d", day, month, year);
-
-                // Get selected location from EditText
-                String selectedLocation = locationEditText.getText().toString().trim();
-                String seekerName = seekerNameEditText.getText().toString().trim();
-
-                // Save to Firebase
-                // Save to Firebase using professionalId
-                DatabaseReference professionalBookingRef = databaseReference.child("professional_bookings").child(professionalId);
-                String bookingId = professionalBookingRef.push().getKey();
-                professionalBookingRef.child(bookingId).child("seekerName").setValue(seekerName);
-                professionalBookingRef.child(bookingId).child("selectedTime").setValue(selectedTime);
-                professionalBookingRef.child(bookingId).child("selectedDate").setValue(selectedDate);
-                professionalBookingRef.child(bookingId).child("selectedLocation").setValue(selectedLocation);
-
-                sendNotificationToProfessional(professionalFCMToken);
-                Toast.makeText(this, "Booking details saved successfully", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "User not authenticated", Toast.LENGTH_SHORT).show();
+            // Ensure professionalId is not null or empty
+            if (TextUtils.isEmpty(professionalId)) {
+                Toast.makeText(this, "Invalid professionalId", Toast.LENGTH_SHORT).show();
+                return;
+            } else if (TextUtils.isEmpty(professionalFCMToken)) {
+                Toast.makeText(this, "Invalid professionalFCMToken", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            // Get selected time from TimePicker
+            int hour, minute;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                hour = timePicker.getHour();
+                minute = timePicker.getMinute();
+            } else {
+                // For API level 21 to 22
+                hour = timePicker.getCurrentHour();
+                minute = timePicker.getCurrentMinute();
+            }
+
+            String selectedTime = String.format("%02d:%02d", hour, minute);
+
+            // Get selected date from DatePicker
+            int day = datePicker.getDayOfMonth();
+            int month = datePicker.getMonth() + 1; // Month is 0-based
+            int year = datePicker.getYear();
+            String selectedDate = String.format("%02d-%02d-%04d", day, month, year);
+
+            // Get selected location from EditText
+            String selectedLocation = locationEditText.getText().toString().trim();
+            String seekerName = seekerNameEditText.getText().toString().trim();
+
+            // Save to Firebase
+            DatabaseReference professionalBookingRef = databaseReference.child("professional_bookings");
+            String bookingId = professionalBookingRef.push().getKey();
+
+            Map<String, Object> bookingData = new HashMap<>();
+            bookingData.put("seekerName", seekerName);
+            bookingData.put("selectedTime", selectedTime);
+            bookingData.put("selectedDate", selectedDate);
+            bookingData.put("selectedLocation", selectedLocation);
+            bookingData.put("bookingStatus", "pending");
+            bookingData.put("professionalId", professionalId);
+            bookingData.put("userId", currentUser.getUid()); // Include the userId
+
+            professionalBookingRef.child(bookingId).setValue(bookingData);
+
+            sendNotificationToProfessional(professionalFCMToken);
+            Toast.makeText(this, "Booking details saved successfully", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "User not authenticated", Toast.LENGTH_SHORT).show();
         }
+    }
+
 
     private void sendNotificationToProfessional(String professionalFCMToken) {
         // Create a data payload for the notification
@@ -155,7 +159,6 @@ public class Send_Booking extends AppCompatActivity {
                 .setData(data)
                 .build());
     }
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_LOCATION_REQUEST_CODE && resultCode == RESULT_OK) {

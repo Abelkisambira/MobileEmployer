@@ -8,4 +8,8 @@
     <color name="lightgrey">#C0C0C0</color>
     <color name="cream">#FDF5E6</color>
     <color name="border_color">#000000</color>
+    <color name="senderTextColor">#FFFFFF</color>
+    <color name="receiverTextColor">#000000</color>
+    <color name="off_white">#FAFAFA</color>
+
 </resources>

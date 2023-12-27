@@ -8,14 +8,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -38,7 +39,7 @@ public class Home extends Fragment {
 
     private EditText searchEditText;
     private TextView nameEditText;
-    private GridView categoryGridView;
+    private RecyclerView categoryRecyclerView;
     private List<Category> categories;  // Declare categories at the class level
     private DatabaseReference usersRef;
 
@@ -46,8 +47,6 @@ public class Home extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
-
-
     }
 
     @Override
@@ -56,19 +55,19 @@ public class Home extends Fragment {
 
         // Initialize views
         searchEditText = view.findViewById(R.id.search_username_input1);
-        categoryGridView = view.findViewById(R.id.categoryGridView);
+        categoryRecyclerView = view.findViewById(R.id.categoryRecyclerView);
         nameEditText = view.findViewById(R.id.name1);
 
-
+        // Initialize the database reference
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         usersRef = database.getReference("Clients");
 
         // Get the current user's ID from Firebase Authentication
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
-            String patientId = currentUser.getUid();
+            String userId = currentUser.getUid();
 
-            usersRef.child(patientId).addListenerForSingleValueEvent(new ValueEventListener() {
+            usersRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
@@ -80,24 +79,30 @@ public class Home extends Fragment {
                 }
 
                 @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(getContext(), "Error occurred", Toast.LENGTH_SHORT).show();
                 }
             });
+        } else {
+            nameEditText.setText("User not authenticated");
         }
+
 
         // Fetch category data (replace with your actual data retrieval)
         fetchCategoryData();
 
-        // Set item click listener for the GridView
-        categoryGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Category selectedCategory = (Category) parent.getItemAtPosition(position);
+        // Set up RecyclerView and adapter for categories
+        CategoryAdapter categoryAdapter = new CategoryAdapter(requireContext(), categories);
+        categoryRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        categoryRecyclerView.setAdapter(categoryAdapter);
 
-                if (selectedCategory != null) {
+        // Set item click listener for the category RecyclerView
+        categoryAdapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Category category) {
+                if (category != null) {
                     // Navigate to CategoryActivity with the selected category ID
-                    navigateToCategoryActivity(selectedCategory.getId());
+                    navigateToCategoryActivity(category.getId());
                 } else {
                     Log.e("Category Error", "Selected category is null");
                 }
@@ -160,12 +165,14 @@ public class Home extends Fragment {
     }
 
     private void updateCategoryAdapter(List<Category> categories) {
-        CategoryAdapter categoryAdapter = new CategoryAdapter(requireContext(), categories);
-        categoryGridView.setAdapter(categoryAdapter);
+        if (isAdded()) {
+            CategoryAdapter categoryAdapter = new CategoryAdapter(requireContext(), categories);
+            categoryRecyclerView.setAdapter(categoryAdapter);
+        }
     }
 
-    private void navigateToCategoryActivity(String categoryId) {
 
+    private void navigateToCategoryActivity(String categoryId) {
         Intent intent = new Intent(requireContext(), CategoryActivity.class);
         intent.putExtra("categoryId", categoryId);
         startActivity(intent);

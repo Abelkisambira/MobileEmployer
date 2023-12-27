@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -148,12 +149,29 @@ public class Navigation extends AppCompatActivity implements NavigationView.OnNa
             showDrawerLayoutFragment(new AboutUs());
         } else if (itemId == R.id.settings) {
             showDrawerLayoutFragment(new Settings());
-        } else if (itemId == R.id.nav_logoout) {
-            Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, Login.class);
-            startActivity(intent);
-            finish();
+        }else if (itemId == R.id.nav_logoout) {
+            // Create an AlertDialog to confirm logout
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Logout");
+            builder.setMessage("Are you sure you want to logout?");
+
+            // Add positive button - user confirms logout
+            builder.setPositiveButton("Yes", (dialog, which) -> {
+                Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, Login.class);
+                startActivity(intent);
+                finish();
+            });
+
+            // Add negative button - user cancels logout
+            builder.setNegativeButton("No", (dialog, which) -> {
+                // Optionally handle cancel action
+            });
+
+            // Show the AlertDialog
+            builder.show();
         }
+
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }

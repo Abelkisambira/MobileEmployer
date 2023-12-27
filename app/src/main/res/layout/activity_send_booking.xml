@@ -10,6 +10,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <!-- Toolbar -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/back"
             android:layout_width="match_parent"
@@ -19,14 +21,13 @@
             app:titleTextColor="@color/white"
             android:textAlignment="center"
             android:gravity="center"
-            app:navigationIcon="@drawable/baseline_arrow_back_24"
+            app:navigationIcon="@drawable/baseline_arrow_back_24" />
 
-            />
-
+        <!-- ServSeekers Name -->
         <androidx.cardview.widget.CardView
             android:id="@+id/home"
             android:layout_width="match_parent"
-            android:layout_height="560dp"
+            android:layout_height="210dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="10dp"
             android:layout_below="@id/back"
@@ -42,14 +43,14 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="ServSeekers Name"
+                    android:text="ServiceSeekers Name"
                     android:layout_marginRight="20dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
                     android:textColor="@color/black"
                     android:textSize="20dp" />
 
-                <!-- EditText to display the selected location -->
+                <!-- EditText for ServSeekers Name -->
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
@@ -63,32 +64,10 @@
                     android:textColor="@color/black"
                     android:background="@android:color/transparent"
                     android:clickable="true" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Choose Date and Time "
-                    android:layout_marginRight="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:paddingBottom="20dp"
-                    android:textColor="@color/black"
-                    android:textSize="20dp" />
-
-                <DatePicker
-                    android:id="@+id/datePicker"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_gravity="center"
-                    android:datePickerMode="calendar" />
-
-                <TimePicker
-                    android:id="@+id/timePicker"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:timePickerMode="spinner" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+        <!-- Location -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="300dp"
@@ -96,7 +75,7 @@
             app:cardElevation="10dp"
             app:cardUseCompatPadding="true"
             android:id="@+id/home1"
-            android:layout_below="@id/home"
+            android:layout_below="@id/time"
             android:layout_marginTop="20dp">
 
             <LinearLayout
@@ -115,7 +94,7 @@
                     android:textColor="@color/black"
                     android:textSize="20dp" />
 
-                <!-- EditText to display the selected location -->
+                <!-- EditText for Selected Location -->
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
@@ -144,22 +123,97 @@
                     android:elevation="4dp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <!-- Date -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="560dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10dp"
+            android:layout_below="@id/home"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Choose Convinient Date "
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:paddingBottom="20dp"
+                    android:textColor="@color/black"
+                    android:textSize="20dp" />
+
+                <!-- DatePicker -->
+                <DatePicker
+                    android:id="@+id/datePicker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:outlineAmbientShadowColor="@color/cyan"
+                    android:datePickerMode="calendar" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Time -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10dp"
+            android:layout_below="@id/date"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:padding="16dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Choose Convinient Time "
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:paddingBottom="20dp"
+
+                    android:textColor="@color/black"
+                    android:textSize="20dp" />
+
+                <TimePicker
+                    android:id="@+id/timePicker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:timePickerMode="clock" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Book Button -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="180dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="10dp"
-            app:cardUseCompatPadding="true"
-
+            android:id="@+id/bt"
             android:layout_below="@+id/home1"
             android:layout_columnWeight="1">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:gravity="center"
                 android:orientation="vertical">
-
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/bookbtn"
@@ -171,9 +225,7 @@
                     android:textColor="@color/white"
                     android:layout_marginBottom="10dp"
                     android:textStyle="bold"
-                    android:textSize="20dp"
-                    />
-
+                    android:textSize="20dp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </RelativeLayout>

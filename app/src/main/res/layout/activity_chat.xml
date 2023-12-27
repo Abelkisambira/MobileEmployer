@@ -1,64 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Chat">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/back"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@color/cyan"-->
+<!--        app:title="Chat with a professional"-->
+<!--        app:titleTextColor="@color/white"-->
+<!--        android:textAlignment="center"-->
+<!--        android:gravity="center"-->
+<!--        app:navigationIcon="@drawable/baseline_arrow_back_24" />-->
+    <RelativeLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cyan"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/other_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_toRightOf="@id/profile_pic_layout"
+            android:text="Username"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <include
+            android:id="@+id/profile_pic_layout"
+            layout="@layout/profile_pic_view"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="10dp"
+            android:layout_toRightOf="@id/back_btn" />
+
+        <ImageButton
+            android:id="@+id/back_btn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/baseline_arrow_back_24"
+            app:tint="@color/white" />
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        android:layout_below="@+id/toolbar"
+        android:layout_above="@+id/bottom_layout"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="18dp"
-        android:background="@color/cyan"
-        android:id="@+id/main_toolbar"
-
-        >
-        
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginStart="10dp"
-            android:text="@string/app_name"
-            android:layout_centerVertical="true"
-            />
-        <ImageButton
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/baseline_search_24"
-            android:layout_alignParentEnd="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:tint="@color/white"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="10dp"
-            android:id="@+id/searchbtn"/>
-
-
-        
-    </RelativeLayout>
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/main_toolbar"
-        android:id="@+id/mainframe_layout"
-         />
-
-    <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_above="@+id/bottom_navigation"
-        android:id="@+id/divider"/>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:layout_alignParentBottom="true"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:id="@+id/bottom_navigation"
-        app:menu="@menu/bottomnav"
-        />
+        android:padding="8dp"
+        android:id="@+id/bottom_layout">
+
+        <EditText
+            android:id="@+id/chat_message_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toLeftOf="@id/message_send_btn"
+            android:background="@drawable/edit_text_rounded_corner"
+            android:elevation="4dp"
+            android:hint="Write message here"
+            android:padding="10dp" />
+
+        <ImageButton
+            android:id="@+id/message_send_btn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="10dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:src="@drawable/baseline_send_24"
+            app:tint="@color/cyan" />
+
+    </RelativeLayout>
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/messageInputLayout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="80dp"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:padding="8dp"-->
+<!--        >-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/messageEditText"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_centerInParent="true"-->
+<!--            android:layout_margin="10dp"-->
+<!--            android:background="@drawable/edit_text_rounded_corner"-->
+<!--            android:elevation="4dp"-->
+<!--            android:hint="Type a message"-->
+<!--            android:padding="10dp"-->
+<!--            android:layout_toLeftOf="@+id/sendButton"-->
+<!--            />-->
+
+<!--        <ImageButton-->
+<!--            android:id="@+id/sendButton"-->
+<!--            android:layout_width="48dp"-->
+<!--            android:layout_height="48dp"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_centerInParent="true"-->
+<!--            android:background="?attr/selectableItemBackgroundBorderless"-->
+<!--            android:layout_toRightOf="@+id/messageEditText"-->
+<!--            android:src="@drawable/baseline_send_24"-->
+<!--            app:tint="@color/cyan"-->
+<!--            android:padding="8dp"-->
+<!--            android:layout_marginStart="10dp"/>-->
+<!--    </RelativeLayout>-->
 
 </RelativeLayout>
