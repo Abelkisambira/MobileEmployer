@@ -32,7 +32,6 @@ import com.innovation.mobileemployer.adapter.ChatAdapter;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,36 +129,6 @@ public class Chat extends AppCompatActivity {
         // Listen for incoming messages
         listenForIncomingMessages();
 
-//        sendButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-//
-//                // Check if the current user is not null
-//                if (currentUser != null) {
-//                    String employerName = currentUser.getDisplayName();
-//
-//                    // Ensure employerName is not null before proceeding
-//                    if (employerName != null) {
-//
-//
-//
-//                        // Use the parameters to send the message and notification
-//                        sendMessage();
-//
-//
-//
-//                    } else {
-//                        // Handle the case where employerName is null
-//                        Log.e("Chat", "User display name is null");
-//                    }
-//                } else {
-//                    // Handle the case where currentUser is null
-//                    Log.e("Chat", "Current user is null");
-//                }
-//            }
-//        });
-        // Set a click listener for the send button
         sendButton.setOnClickListener(v -> sendMessage());
     }
 
@@ -195,14 +164,10 @@ public class Chat extends AppCompatActivity {
         String messageText = snapshot.child("message").getValue(String.class);
         String employerID = snapshot.child("employerID").getValue(String.class);
         String professionalID = snapshot.child("professionalID").getValue(String.class);
-        Date timestamp = snapshot.child("time").getValue(Date.class);
+        Timestamp timestamp = snapshot.child("time").getValue(Timestamp.class);
         // Ensure you have a way to retrieve the employer name
         String employerName = getEmployerName();
 
-//        // Check if the message is relevant to the current chat
-//        if (messageText != null && employerID != null && professionalID1 != null &&
-//                (employerID.equals(employerID) || employerID.equals(professionalID) ||
-//                        professionalID1.equals(employerID) || professionalID1.equals(professionalID))) {
 
         // Assuming you have a method to get the receiver name based on employerID
         String receiverName = getReceiverName(professionalName);
@@ -211,9 +176,6 @@ public class Chat extends AppCompatActivity {
         ChatMessage chatMessage = new ChatMessage(employerName, messageText,isSentByCurrentUser, employerID,professionalID, receiverName, timestamp);
         addMessage(chatMessage);
 
-        // Update the ViewModel with the new message
-//            updateViewModelWithNewMessage(chatMessage);
-//        }
 
     }
     private boolean checkIfSentByCurrentUser(String employerID) {
@@ -280,18 +242,20 @@ public class Chat extends AppCompatActivity {
             FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
             Timestamp timestamp = Timestamp.now();
-            Date timestampDate = new Date(timestamp.getSeconds() * 1000);
+
+
+//            Date timestampDate = new Date(timestamp.getSeconds() * 1000);
             // Adjust to use professional's ID
             String employerID = currentUser.getUid();
-            String employerName = currentUser.getDisplayName();
 
             professionalsRef.child(employerID).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        String employersFCMToken = dataSnapshot.child("fcmToken").getValue(String.class);
+                        String employerName = dataSnapshot.child("username").getValue(String.class);
+                            String employersFCMToken = dataSnapshot.child("fcmToken").getValue(String.class);
 
-                        if (employersFCMToken != null && !employersFCMToken.isEmpty()) {
+                        if (employersFCMToken != null && !employersFCMToken.isEmpty() && employerName != null && !employerName.isEmpty()) {
                             String messageKey = messagesRef.push().getKey();
                             Map<String, String> messageMap = new HashMap<>();
 //                                    Map<String, String> data = new HashMap<>();
@@ -300,7 +264,7 @@ public class Chat extends AppCompatActivity {
                             messageMap.put("message", messageText);
                             messageMap.put("professionalID", professionalID);
                             messageMap.put("employerID", employerID);
-                            messageMap.put("time", String.valueOf(timestampDate));
+                            messageMap.put("time", String.valueOf(timestamp));
 
 //                                    messagesRef.child(messageKey).updateChildren(messageMap);
 
@@ -311,7 +275,7 @@ public class Chat extends AppCompatActivity {
 
 //                                    addMessage(employerName, messageText, true, employerID, professionalName, timestamp);
                             // Add the new message to the list
-                            ChatMessage chatMessage = new ChatMessage(employerName, messageText, true, employerID,professionalID, professionalName, timestampDate);
+                            ChatMessage chatMessage = new ChatMessage(employerName, messageText, true, employerID,professionalID, professionalName, timestamp);
                             DatabaseReference messagesRef = FirebaseDatabase.getInstance().getReference("messages");
                             messagesRef.push().setValue(chatMessage);
 

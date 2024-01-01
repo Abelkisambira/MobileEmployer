@@ -1,19 +1,19 @@
 package com.innovation.mobileemployer;
 
 
-import java.util.Date;
+import com.google.firebase.Timestamp;
 
 public class ChatMessage {
     private String message;
     private String employerID,professionalID;
     private boolean isSentByUser;
     private String receiverName, employerName;
-    private Date timestamp;
+    private Timestamp timestamp;
 
     public ChatMessage() {
     }
 
-    public ChatMessage(String employerName, String message, boolean isSentByUser, String employerID,String professionalID, String receiverName, Date timestamp) {
+    public ChatMessage(String employerName, String message, boolean isSentByUser, String employerID,String professionalID, String receiverName, Timestamp timestamp) {
         this.employerName = employerName;
         this.message = message;
         this.isSentByUser = isSentByUser;
@@ -71,11 +71,11 @@ public class ChatMessage {
         this.employerName = employerName;
     }
 
-    public Date getTimestamp() {
+    public Timestamp getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
 }
