@@ -5,15 +5,23 @@
     android:orientation="vertical"
     android:padding="8dp">
 
-
-
-    <!-- Message container to hold both sender and receiver messages -->
-    <LinearLayout
-        android:id="@+id/receiverMessageContainer"
+    <TextView
+        android:id="@+id/timestampTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <!-- TextView for sender's name -->
+        android:textStyle="bold"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"/>
+
+<!--    &lt;!&ndash; Message container to hold both sender and receiver messages &ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--        android:id="@+id/receiverMessageContainer"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical">-->
+<!--        &lt;!&ndash; TextView for sender's name &ndash;&gt;-->
         <TextView
             android:id="@+id/receiverTextView"
             android:layout_width="wrap_content"
@@ -33,16 +41,16 @@
             android:padding="30dp"
             android:textSize="16sp"
             android:background="@drawable/baseline_chat_bubble_24"/>
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
-    <!-- Add a margin to separate sender's message -->
-    <LinearLayout
-        android:id="@+id/senderMessageContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginStart="200dp">
-        <!-- TextView for sender's name -->
+<!--    &lt;!&ndash; Add a margin to separate sender's message &ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--        android:id="@+id/senderMessageContainer"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--        android:layout_marginStart="200dp">-->
+<!--        &lt;!&ndash; TextView for sender's name &ndash;&gt;-->
         <TextView
             android:id="@+id/senderTextView"
             android:layout_width="wrap_content"
@@ -51,6 +59,7 @@
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:paddingTop="4dp"
+            android:layout_marginStart="200dp"
             android:paddingBottom="4dp"/>
 
         <!-- TextView for the sender's message -->
@@ -61,7 +70,8 @@
             android:maxWidth="500dp"
             android:padding="30dp"
             android:textSize="16sp"
+            android:layout_marginStart="200dp"
             android:backgroundTint="@color/lightgrey"
             android:background="@drawable/baseline_chat_bubble_24"/>
-    </LinearLayout>
+<!--    </LinearLayout>-->
 </LinearLayout>

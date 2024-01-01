@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.innovation.mobileemployer.adapter.SubcategoryAdapter;
+import com.innovation.mobileemployer.adapter.CatAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +18,9 @@ import java.util.List;
 public class CategoryActivity extends AppCompatActivity {
 
     private TextView categoryNameTextView;
-    private RecyclerView subcategoryRecyclerView;
-    private List<String> subcategories;
-    private SubcategoryAdapter subcategoryAdapter;
+    private RecyclerView professionalRecyclerView;
+    private List<Professionals> professionalsInCategory;
+    private CatAdapter catAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,52 +28,60 @@ public class CategoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_category);
 
         categoryNameTextView = findViewById(R.id.categoryNameTextView);
-        subcategoryRecyclerView = findViewById(R.id.subcategoryRecyclerView);
+        professionalRecyclerView = findViewById(R.id.professionalRecyclerView);
 
-        subcategories = new ArrayList<>();
-        subcategoryAdapter = new SubcategoryAdapter(subcategories);
-        subcategoryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        subcategoryRecyclerView.setAdapter(subcategoryAdapter);
+        professionalsInCategory = new ArrayList<>();
+        catAdapter = new CatAdapter(this, professionalsInCategory);
+        professionalRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        professionalRecyclerView.setAdapter(catAdapter);
 
         // Retrieve the selected category's ID from the intent
-        String categoryId = getIntent().getStringExtra("categoryId");
-        if (categoryId != null) {
-            // Fetch and display subcategories
-            fetchAndDisplaySubcategories(categoryId);
+        String selectedCategory = getIntent().getStringExtra("categoryName");
+        if (selectedCategory != null) {
+            // Set the selected category in CategoryActivity
+            setSelectedCategory(selectedCategory);
         } else {
-            Log.e("Category Error", "Category ID is null");
+            Log.e("Category Error", "Selected Category is null");
         }
     }
 
-    // Add these lines in your CategoryActivity class
+    private void setSelectedCategory(String selectedCategory) {
+        // Set the category name in the TextView
+        categoryNameTextView.setText(selectedCategory);
 
-    private void fetchAndDisplaySubcategories(String categoryId) {
-
-        fetchSubcategoriesFromDatabase(categoryId);
+        // Fetch and display professionals based on the selected category
+        fetchAndDisplayProfessionals(selectedCategory);
     }
 
-    private void fetchSubcategoriesFromDatabase(String categoryId) {
-        subcategories.clear();
+    private void fetchAndDisplayProfessionals(String selectedCategory) {
+        // Fetch professionals from the database based on the selected category
+        // Modify the code to fit your database structure and retrieval logic
 
-        // Fetch subcategories and update the list
+        // Example: Fetching professionals from Firestore
         FirebaseFirestore.getInstance()
-                .collection("categories")
-                .document(categoryId)
-                .collection("subcategories")
+                .collection("Professionals")
+                .whereEqualTo("category", selectedCategory)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        List<Professionals> professionals = new ArrayList<>();
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            String subcategoryName = document.getString("name");
-                            subcategories.add(subcategoryName);
+                            Professionals professional = document.toObject(Professionals.class);
+                            professionals.add(professional);
                         }
-                        // Notify the adapter that data has changed
-                        subcategoryAdapter.notifyDataSetChanged();
+                        // Update UI with the fetched professionals
+                        updateUIWithProfessionals(professionals);
                     } else {
-                        Log.e("Firestore Error", "Error getting subcategories: ", task.getException());
+                        Log.e("Firestore Error", "Error getting professionals: ", task.getException());
                     }
                 });
     }
 
-
+    private void updateUIWithProfessionals(List<Professionals> professionals) {
+        // Update the UI to display the fetched professionals
+        // For example, update a RecyclerView or any other UI component
+        professionalsInCategory.clear();
+        professionalsInCategory.addAll(professionals);
+        catAdapter.notifyDataSetChanged();
+    }
 }

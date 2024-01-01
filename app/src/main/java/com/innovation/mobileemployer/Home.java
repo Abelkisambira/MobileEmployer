@@ -97,15 +97,12 @@ public class Home extends Fragment {
         categoryRecyclerView.setAdapter(categoryAdapter);
 
         // Set item click listener for the category RecyclerView
-        categoryAdapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Category category) {
-                if (category != null) {
-                    // Navigate to CategoryActivity with the selected category ID
-                    navigateToCategoryActivity(category.getId());
-                } else {
-                    Log.e("Category Error", "Selected category is null");
-                }
+        categoryAdapter.setOnItemClickListener(category -> {
+            if (category != null) {
+                // Navigate to CategoryActivity with the selected category name
+                navigateToCategoryActivity(category.getName());
+            } else {
+                Log.e("Category Error", "Selected category is null");
             }
         });
 
@@ -172,9 +169,12 @@ public class Home extends Fragment {
     }
 
 
-    private void navigateToCategoryActivity(String categoryId) {
+    private void navigateToCategoryActivity(String categoryName) {
+        String category_Name=categoryName;
+        Professionals professionals = new Professionals();
+        category_Name=professionals.getCategory();
         Intent intent = new Intent(requireContext(), CategoryActivity.class);
-        intent.putExtra("categoryId", categoryId);
+        intent.putExtra("categoryName", category_Name);
         startActivity(intent);
     }
 }

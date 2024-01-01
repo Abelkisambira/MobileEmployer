@@ -351,19 +351,7 @@ public class Chats extends Fragment {
             cardView.addView(linearLayout);
             professionalLayout.addView(cardView);
 //
-//            chatButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    // Call a method to send a notification to the professional
-//                    sendNotificationToProfessional(professional);
-//
-//                    // Launch SendBookingActivity with professional's FCM token
-//                    Intent intent = new Intent(requireContext(), Chat.class);
-//                    intent.putExtra("professionalFCMToken", professional.getFcmToken());
-//                    intent.putExtra("professionalId", professional.getProfessionalID());
-//                    startActivity(intent);
-//                }
-//            });
+
 
             chatButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -372,12 +360,14 @@ public class Chats extends Fragment {
                     String professionalId = professional.getProfessionalID();
                     String professionalFCMToken = professional.getFcmToken();
                     String professionalName = professional.getUsername();
+                    String professionalProfilePicUrl=professional.getImageUrl();
 
                     // Launch Chat activity with professional's information
                     Intent intent = new Intent(requireContext(), Chat.class);
                     intent.putExtra("professionalFCMToken", professionalFCMToken);
                     intent.putExtra("professionalId", professionalId);
                     intent.putExtra("PROFESSIONAL_NAME", professionalName);
+                    intent.putExtra("PROFESSIONAL_PROFILE_PIC_URL", professionalProfilePicUrl);
                     startActivity(intent);
                 }
             });

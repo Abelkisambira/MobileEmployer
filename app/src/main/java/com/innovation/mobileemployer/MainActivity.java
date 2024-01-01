@@ -3,12 +3,14 @@ package com.innovation.mobileemployer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
     private static int SPLASH_SCREEN = 3000;
@@ -62,6 +64,14 @@ public class MainActivity extends AppCompatActivity {
         // User is not logged in, navigate to login
         Intent intent = new Intent(MainActivity.this, Login.class);
         startActivity(intent);
+    }
+    void getFCMToken(){
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                    String token = task.getResult();
+                    Log.i("My token",token);
+            }
+        });
     }
 }
 
